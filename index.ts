@@ -1,20 +1,21 @@
-import express, { type Request, Response, NextFunction } from "express";
-import { registerRoutes } from "./routes";
-import { serveStatic } from "./static";
-import { createServer } from "http";
+import express from "express"
+import { registerRoutes } from "./routes.js"
 
-const app = express();
+const app = express()
 
-app.get("/", (_req, res) => {
-  res.status(200).send("OK");
-});
+app.use(express.json())
 
-app.get("/health", (_req, res) => {
-  res.status(200).send("OK");
-});
-const httpServer = createServer(app);
+app.get("/", (req, res) => {
+  res.send("Aurora Routine API running")
+})
 
+registerRoutes(app)
 
+const port = process.env.PORT || 3000
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`)
+})
 
 declare module "http" {
   interface IncomingMessage {
