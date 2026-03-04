@@ -1,14 +1,19 @@
-import bcrypt from "bcrypt";
-import { db } from "./db";
-import { users } from "../shared/schema";
-import { eq } from "drizzle-orm";
-import type { Express } from "express";
-import { type Server } from "http";
+import { calculateNextSleep } from "./utils/sleepWindow.js"
 
-    export async function registerRoutes(
-      httpServer: Server,
-      app: Express
-    ): Promise<Server> {
+export function registerRoutes(app) {
+
+  app.post("/api/routine/predict-sleep", (req, res) => {
+
+    const { ageWeeks, lastSleepEnd } = req.body
+
+    const result = calculateNextSleep(
+      ageWeeks,
+      new Date(lastSleepEnd)
+    )
+
+    res.json(result)
+  })
+}
 
       // Register
 app.post("/api/register", async (req, res) => {
